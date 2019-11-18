@@ -58,8 +58,6 @@ class DoubleCooperate(Strategy):
 
 class RandomChoice(Strategy):
     name = "RandomChoice"
-    def get_name(self):
-        return "RandomChoice"
 
     def move(self):
         if random.random() > 0.5:
@@ -69,8 +67,6 @@ class RandomChoice(Strategy):
 
 class CopyOpponent(Strategy):
     name = "CopyOpponent"
-    def get_name(self):
-        return "CopyOpponent"
 
     def move(self):
         if len(self.history) < 1:
@@ -83,3 +79,22 @@ class CopyOpponent(Strategy):
             return cooperate
 
         return cheat
+
+
+class Cheater(Strategy):
+    name = "Cheater"
+
+    def move(self):
+        return cheat
+
+
+class Pavlov(Strategy):
+    name = "Pavlov"
+
+    def move(self):
+        if len(self.history) == 0:
+            return cooperate
+        if self.history[-1] == self.oponent.history[-1]:
+            return cooperate
+        else:
+            return cheat

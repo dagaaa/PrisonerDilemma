@@ -1,4 +1,4 @@
-from stategies import cheat, cooperate, Strategy, DoubleCooperate, CopyOpponent, RandomChoice
+from stategies import cheat, cooperate, Strategy, DoubleCooperate, CopyOpponent, RandomChoice, Cheater, Pavlov
 
 game_score = {
     cheat: {cheat: [1, 1],
@@ -28,16 +28,24 @@ def play(player1: Strategy, player2: Strategy, games=10, iterations=100):
     avg_player1 = sum(player1.game_scores) / games
     avg_player2 = sum(player2.game_scores) / games
     print(f"-----Prisoner Dilemma between {player1.name} and {player2.name}-------")
-    print(f"Average games score {avg_player1}, all games score {player1.game_scores}for strategy {player1.name} ")
-    print(f"Average games score {avg_player2}, all games score {player2.game_scores}for strategy {player2.name} ")
+    print(f"Average games score {avg_player1}, all games score {player1.game_scores} for strategy {player1.name} ")
+    print(f"Average games score {avg_player2}, all games score {player2.game_scores} for strategy {player2.name} ")
+    return avg_player1, avg_player2
 
 
 if __name__ == '__main__':
     players = {DoubleCooperate.name: lambda: DoubleCooperate(),
                CopyOpponent.name: lambda: CopyOpponent(),
-               RandomChoice.name: lambda: RandomChoice()}
-    names = [DoubleCooperate.name, CopyOpponent.name, RandomChoice.name]
+               RandomChoice.name: lambda: RandomChoice(),
+               Cheater.name: lambda: Cheater(),
+               Pavlov.name: lambda: Pavlov()}
+    names = [Cheater.name, RandomChoice.name, CopyOpponent.name, DoubleCooperate.name,  Pavlov.name]
+    scores = {}
 
-    for name in names:
-        for name2 in names:
-            play(players[name](), players[name2]())
+    for i in range(len(names)):
+        for j in range(i, len(names)):
+            name = names[i]
+            name2 = names[j]
+            scores[(name, name2)] = play(players[name](), players[name2]())
+
+    print(scores)
